@@ -2,6 +2,7 @@ import * as React from "react";
 import { styled } from "../styled";
 import { GraphQLSchema } from "graphql";
 import { downloadSchema } from "../utils/createSDL";
+import { Logo } from "../config";
 
 export const Button = styled.button`
   text-transform: uppercase;
@@ -12,9 +13,7 @@ export const Button = styled.button`
   flex: 0 0 auto;
   letter-spacing: 0.53px;
   font-size: 14px;
-  padding: 6px 9px 7px 10px;
   margin-left: 6px;
-
   cursor: pointer;
   transition: 0.1s linear background-color;
   &:first-child {
@@ -27,6 +26,7 @@ export const Button = styled.button`
 
 interface SDLHeaderProps {
   schema: GraphQLSchema;
+  name: string;
 }
 
 interface State {
@@ -56,20 +56,21 @@ class SDLHeader extends React.Component<SDLHeaderProps, State> {
   };
 
   render() {
+    const { name } = this.props;
     const { open } = this.state;
     return (
       <SchemaHeader>
-        <Title>Schema</Title>
+        <Title>{`${name} Schema`}</Title>
         <Box>
           <Download onClick={this.showOptions} open={open}>
             Download
           </Download>
           {open && (
             <React.Fragment>
-              <Option alt={true} onClick={this.printIntrospection}>
+              <Option alternate={true} onClick={this.printIntrospection}>
                 JSON
               </Option>
-              <Option alt={false} onClick={this.printSDL}>
+              <Option alternate={false} onClick={this.printSDL}>
                 SDL
               </Option>
             </React.Fragment>
@@ -90,6 +91,7 @@ export const SchemaExplorerContainer = styled.div`
   flex-wrap: wrap;
   align-items: stretch;
   padding: 8px;
+  padding-top: 64px;
   background: white;
   font-family: ${p => p.theme.settings["editor.fontFamily"]};
   font-size: ${p => `${p.theme.settings["editor.fontSize"]}px`};
@@ -97,17 +99,23 @@ export const SchemaExplorerContainer = styled.div`
 `;
 
 const SchemaHeader = styled.div`
+  position: fixed;
+  top: 0;
   display: flex;
   height: 64px;
-  width: 100%;
+  right: 0;
+  left: 0;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
+  z-index: 1000;
+  background: ${p => p.theme.editorColours.navigationBar};
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
 `;
 
 const Box = styled.div`
   position: absolute;
-  top: 16px;
-  right: 2em;
+  top: 10px;
+  right: 1em;
   width: 108px;
   display: flex;
   flex-wrap: wrap;
@@ -180,7 +188,7 @@ const styleHelper = p => {
         button: p.open ? "#2e5482" : p.theme.colours.blue
       },
       buttonText: "white",
-      button: p.alt ? "#386bac" : p.theme.colours.blue,
+      button: p.alternate ? "#386bac" : p.theme.colours.blue,
       buttonHover: "#2e5482",
       buttonTextHover: "white"
     };
@@ -200,7 +208,7 @@ const styleHelper = p => {
 };
 
 const Title = styled.div`
-  color: rgba(0, 0, 0, 0.3);
+  color: white;
   cursor: default;
   font-size: 14px;
   font-weight: 600;

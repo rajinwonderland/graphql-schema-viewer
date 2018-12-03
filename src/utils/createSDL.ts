@@ -6,6 +6,7 @@ import {
   GraphQLSchema,
   printSchema
 } from "graphql";
+import * as graphql from "prettier/parser-graphql";
 import { serialize } from "./stack";
 import * as prettier from "prettier/standalone";
 

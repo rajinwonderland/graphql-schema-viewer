@@ -3,12 +3,12 @@ import { render } from "react-dom";
 import { styled, ThemeProvider, theme as styledTheme } from "./styled";
 import SDLView from "./components/SDLView";
 import { buildSchema, buildClientSchema } from "graphql";
-import Spinner from "./components/Spinner";
 import { createApolloFetch } from "apollo-fetch";
 import { introspectionQuery } from "./utils/constants";
 import "./index.css";
+import config from "./config";
 
-const uri = "https://api.marvelql.com";
+const uri = config.endpoint;
 const fetcher = createApolloFetch({ uri });
 
 export interface State {

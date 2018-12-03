@@ -44,6 +44,7 @@ Start Hacking
 - [x] Codesandbox Demo
 - [ ] Publish npm module
 - [ ] Setup Inputs for different graphql endpoints
+- [ ] Add CodeMirror SDLView to project
 - [ ] Setup demos with popular graphql endpoints
 - [ ] Refactor and filter out all the graphql-playground utilities
 

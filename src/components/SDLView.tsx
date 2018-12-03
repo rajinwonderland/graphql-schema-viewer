@@ -9,8 +9,10 @@ import {
   CategoryTitle,
   SDLFieldDoc,
   ErrorContainer,
-  SDLColumn
+  SDLColumn,
+  SDLHeader
 } from "./SDLStyles";
+import config from "../config";
 
 const columnWidth = "100%";
 
@@ -42,7 +44,7 @@ class SDLView extends React.Component<Props> {
     return (
       <SchemaExplorerContainer>
         <SDLColumn width={columnWidth}>
-          <CategoryTitle>Schema</CategoryTitle>
+          <SDLHeader name={config.name} schema={schema} />
           {emptySchema && <SDLColumn>{emptySchema}</SDLColumn>}
           {!emptySchema &&
             schema &&
