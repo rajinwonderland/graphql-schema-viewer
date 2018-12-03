@@ -2,7 +2,6 @@ import * as React from "react";
 import { styled } from "../styled";
 import { GraphQLSchema } from "graphql";
 import { downloadSchema } from "../utils/createSDL";
-import { Logo } from "../config";
 
 export const Button = styled.button`
   text-transform: uppercase;
@@ -85,7 +84,7 @@ export { SDLHeader };
 export const SchemaExplorerContainer = styled.div`
   height: 100%;
   width: 100%;
-  overflow-x: auto;
+  overflow: auto;
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
@@ -124,7 +123,7 @@ const Box = styled.div`
 
 const Title = styled.div`
   flex: 1;
-  color: ${p => styleHelper(p).title};
+  color: ${p => p.color || styleHelper(p).title};
   cursor: default;
   font-size: 14px;
   font-weight: 600;
@@ -171,11 +170,10 @@ export { SDLColumn };
 
 const Column = styled<SDLColumnProps, "div">("div")`
   display: flex;
-  flex: 1 0 auto;
+  flex: 1;
   flex-flow: column;
   padding-bottom: 20px;
   border-right: 1px solid ${p => p.theme.colours.black10};
-  overflow: hidden;
 `;
 
 const styleHelper = p => {
@@ -207,17 +205,9 @@ const styleHelper = p => {
   };
 };
 
-const Title = styled.div`
-  color: white;
-  cursor: default;
-  font-size: 14px;
-  font-weight: 600;
-  text-transform: uppercase !important;
-  letter-spacing: 1px;
-  padding: 16px;
-  user-select: none;
-`;
-export const CategoryTitle = ({ children }) => <Title>{children}</Title>;
+export const CategoryTitle = ({ children }) => (
+  <Title color="rgba(61, 88, 102, 0.5)">{children}</Title>
+);
 
 export const ErrorContainer = styled.div`
   font-weight: bold;
