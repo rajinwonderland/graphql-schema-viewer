@@ -2,7 +2,7 @@
 
 A cool typescript based React component for viewing graphql schemas. Still a WIP!
 
-**Demo [Here](https://n4pp5npvom.codesandbox.io/) on [CodeSandbox](https://codesandbox.io/s/n4pp5npvom)!**
+**Demo [Here](https://py2jv36pzq.codesandbox.io/) on [CodeSandbox](https://codesandbox.io/s/py2jv36pzq)!**
 
 ## Background
 
