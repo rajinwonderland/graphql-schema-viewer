@@ -4,26 +4,28 @@ import { Button } from '../SDLExplorerView/SDLStyles';
 import { GraphQLSchema } from 'graphql';
 import { downloadSchema } from '../../utils/createSDL';
 
-interface SDLHeaderProps {
+export interface SDLHeaderProps {
 	schema: GraphQLSchema;
 	fixed?: boolean;
 }
 
-interface State {
+export interface State {
 	open: boolean;
 }
 
 export default class SDLHeader extends React.Component<SDLHeaderProps, State> {
-	ref;
+	public static defaultProps = {
+		fixed: false
+	};
 	private header: any;
-	constructor(props) {
+	constructor(props: SDLHeaderProps) {
 		super(props);
 		this.state = {
 			open: false
 		};
 	}
 
-	componentWillMount() {
+	componentDidMount() {
 		document.addEventListener('mousedown', this.handleClick, false);
 	}
 
@@ -31,7 +33,7 @@ export default class SDLHeader extends React.Component<SDLHeaderProps, State> {
 		document.removeEventListener('mousedown', this.handleClick, false);
 	}
 
-	handleClick = e => {
+	handleClick = (e: MouseEvent) => {
 		if (this.header.contains(e.target)) {
 			return;
 		}
@@ -79,7 +81,7 @@ export default class SDLHeader extends React.Component<SDLHeaderProps, State> {
 	}
 }
 
-const SchemaHeader = styled.div`
+const SchemaHeader = styled.div<{ fixed?: boolean }>`
 	display: flex;
 	position: ${p => (p.fixed ? 'fixed' : 'relative')};
 	top: 0;
@@ -115,7 +117,7 @@ const Title = styled.div`
 	padding: 16px;
 `;
 
-const Download = styled(Button)`
+const Download = styled(Button)<{ open?: boolean }>`
 	flex: 1;
 	color: ${p => styleHelper(p).download['text']};
 	background: ${p => styleHelper(p).download['button']};

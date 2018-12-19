@@ -33,7 +33,7 @@ const Title = styled.div`
 	padding: 16px;
 	user-select: none;
 `;
-export const CategoryTitle = ({ children }) => <Title>{children}</Title>;
+export const CategoryTitle = ({ children }: any) => <Title>{children}</Title>;
 
 export const ErrorContainer = styled.div`
 	font-weight: bold;
@@ -58,7 +58,7 @@ export const SchemaExplorerContainer = styled.div`
 	flex-direction: column;
 	flex-wrap: wrap;
 	background: ${p =>
-		p.mode === 'dark' ? p.theme.editorColours.editorBackground : 'white'};
+		p.theme.mode === 'dark' ? p.theme.editorColours.editorBackground : 'white'};
 	font-family: ${p => p.theme.settings['editor.fontFamily']};
 	font-size: ${p => `${p.theme.settings['editor.fontSize']}px`};
 	outline: none !important;
@@ -84,12 +84,12 @@ const SDLColumn = ({
 
 export { SDLColumn };
 
-const Column = styled<SDLColumnProps, 'div'>('div')`
+const Column = styled('div')`
 	display: flex;
-	flex: ${p => (p.verticalScroll ? '1 1 auto' : '1 0 auto')};
+	flex: ${(p: SDLColumnProps) => (p.verticalScroll ? '1 1 auto' : '1 0 auto')};
 	flex-flow: column;
 	padding-bottom: 20px;
-	margin-top: ${p => (p.verticalScroll ? '64px' : 0)};
-  overflow: ${p => (p.verticalScroll ? 'scroll' : 'auto')}
-	border-right: 1px solid ${p => p.theme.colours.black10};
+	margin-top: ${(p: SDLColumnProps) => (p.verticalScroll ? '64px' : 0)};
+	overflow: ${(p: SDLColumnProps) => (p.verticalScroll ? 'scroll' : 'auto')};
+	border-right: 1px solid ${(p: any) => p.theme.colours.black10};
 `;

@@ -91,10 +91,12 @@ function addLineBreaks(sdl: string, commentsDisabled?: boolean) {
 // Returns a prettified schema
 export function getSDL(
 	schema: GraphQLSchema | null | undefined,
-	commentsDisabled: boolean
+	commentsDisabled: boolean = true
 ) {
 	if (schema instanceof GraphQLSchema) {
-		const rawSdl = printSchema(schema, { commentDescriptions: false });
+		const rawSdl = printSchema(schema, {
+			commentDescriptions: true
+		});
 		if (commentsDisabled) {
 			// Removes Comments but still has new lines
 			const sdlWithNewLines = rawSdl.replace(/(\#[\w\'\s\r\n\*](.*)$)/gm, '');

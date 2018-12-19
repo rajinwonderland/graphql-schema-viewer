@@ -3,7 +3,6 @@ import Spinner from '../Spinner';
 import SDLFieldDoc from './SDLFieldDoc';
 import { sdlArray } from '../../utils/createSDL';
 import { GraphQLSchema } from 'graphql';
-import { styled } from '../../styled';
 import {
 	SchemaExplorerContainer,
 	ErrorContainer,
@@ -40,12 +39,12 @@ class SDLExplorerView extends React.Component<EProps> {
 		return (
 			<SchemaExplorerContainer>
 				<SDLColumn width={width} verticalScroll={true}>
-					<SDLHeader schema={schema} fixed />
+					<SDLHeader schema={schema} fixed={true} />
 					{emptySchema && emptySchema}
 					{!emptySchema &&
 						schema &&
 						types &&
-						types.map(t => (
+						types.map((t: any) => (
 							<SDLFieldDoc schema={schema} type={t} key={t.name} />
 						))}
 				</SDLColumn>

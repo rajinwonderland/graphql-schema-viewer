@@ -4,27 +4,38 @@ import EditorWrapper from './EditorWrapper';
 import { styled } from '../../styled';
 import { getSDL } from '../../utils/createSDL';
 
-export interface Props {
+export interface SDLEditorProps {
+	disableComments?: boolean;
 	schema?: GraphQLSchema | null;
 	getRef?: (ref: SDLEditor) => void;
 	width?: any;
-	sessionId?: string;
 }
 
-class SDLEditor extends React.PureComponent<Props, { overflowY: boolean }> {
-	cachedValue: string;
+export interface SDLEditorState {
+	loading: boolean;
+	disableComments: boolean;
+	overflowY: boolean;
+}
+
+class SDLEditor extends React.PureComponent<SDLEditorProps, SDLEditorState> {
+	public static defaultProps = {
+		disableComments: true
+	};
+	cachedValue: any;
 	private editor: any;
 	private mirror: any;
 
-	constructor(props) {
+	constructor(props: SDLEditorProps) {
 		super(props);
 		this.state = {
-			overflowY: false
+			loading: true,
+			disableComments: props.disableComments || true,
+			overflowY: true
 		};
 		// Keep a cached version of the value, this cache will be updated when the
 		// editor is updated, which can later be used to protect the editor from
 		// unnecessary updates during the update lifecycle.
-		this.cachedValue = props.value || '';
+		this.cachedValue = props.schema;
 		if (this.props.getRef) {
 			this.props.getRef(this);
 		}
@@ -33,6 +44,7 @@ class SDLEditor extends React.PureComponent<Props, { overflowY: boolean }> {
 	componentDidMount() {
 		// Lazily require to ensure requiring GraphiQL outside of a Browser context
 		// does not produce an error.
+		const value = this.parseSchema();
 		const CodeMirror = require('codemirror');
 		require('codemirror/addon/fold/brace-fold');
 		require('codemirror/addon/comment/comment');
@@ -43,12 +55,13 @@ class SDLEditor extends React.PureComponent<Props, { overflowY: boolean }> {
 
 		this.editor = CodeMirror(this.mirror, {
 			autofocus: false,
-			value: getSDL(this.props.schema, false) || '',
+			value,
 			lineNumbers: false,
 			showCursorWhenSelecting: false,
 			tabSize: 1,
 			mode: 'graphql',
 			theme: 'graphiql',
+			lineWrapping: true,
 			readOnly: true,
 			gutters
 		});
@@ -58,20 +71,35 @@ class SDLEditor extends React.PureComponent<Props, { overflowY: boolean }> {
 		this.editor.refresh();
 	}
 
-	componentDidUpdate(prevProps: Props) {
+	componentDidUpdate(prevProps: SDLEditorProps) {
 		const CodeMirror = require('codemirror');
+
 		if (this.props.schema !== prevProps.schema) {
-			this.cachedValue = getSDL(this.props.schema, true) || '';
-			this.editor.setValue(getSDL(this.props.schema, true));
+			this.setState(
+				{
+					loading: true
+				},
+				() => {
+					const schema = this.parseSchema();
+					this.cachedValue = schema;
+					this.editor.setValue(schema);
+				}
+			);
 			CodeMirror.signal(this.editor, 'change', this.editor);
 		}
 
-		// if (
-		// 	this.props.settings['schema.disableComments'] !==
-		// 	prevProps.settings['schema.disableComments']
-		// ) {
-		// 	this.editor.refresh();
-		// }
+		if (this.props.disableComments !== prevProps.disableComments) {
+			this.setState(
+				{
+					loading: true
+				},
+				() => {
+					const schema = this.parseSchema();
+					this.cachedValue = schema;
+					this.editor.refresh();
+				}
+			);
+		}
 	}
 
 	componentWillUnmount() {
@@ -79,7 +107,16 @@ class SDLEditor extends React.PureComponent<Props, { overflowY: boolean }> {
 		this.editor = null;
 	}
 
-	handleScroll = e => {
+	parseSchema = () => {
+		const schema = getSDL(this.props.schema, this.state.disableComments);
+		this.cachedValue = schema;
+		this.setState({
+			loading: false
+		});
+		return schema;
+	};
+
+	handleScroll = (e: any) => {
 		if (e.doc.scrollTop > 0) {
 			return this.setState({
 				overflowY: true
@@ -100,7 +137,7 @@ class SDLEditor extends React.PureComponent<Props, { overflowY: boolean }> {
 		);
 	}
 
-	setRef = ref => {
+	setRef = (ref: any) => {
 		this.mirror = ref;
 	};
 
@@ -128,7 +165,7 @@ const Editor = styled.div`
 	}
 `;
 const OverflowShadow = styled.div`
-	position: fixed:
+	position: fixed;
 	top: 0;
 	left: 0;
 	right: 0;

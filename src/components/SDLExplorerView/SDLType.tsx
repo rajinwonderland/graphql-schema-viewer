@@ -96,7 +96,7 @@ interface DocsCategoryItemProps {
 	active?: boolean;
 }
 
-const DocsCategoryItem = styled<DocsCategoryItemProps, 'div'>('div')`
+const DocsCategoryItem = styled<DocsCategoryItemProps & 'div' & any>('div')`
 	position: relative;
 	padding: 6px 16px;
 	overflow: auto;
