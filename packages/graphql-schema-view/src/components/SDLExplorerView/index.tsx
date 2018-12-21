@@ -1,56 +1,32 @@
 import * as React from 'react';
-import Spinner from '../Spinner';
-import SDLFieldDoc from './SDLFieldDoc';
-import { sdlArray } from '../../utils/createSDL';
-import { GraphQLSchema } from 'graphql';
 import {
-	SchemaExplorerContainer,
-	ErrorContainer,
-	SDLColumn
-} from './SDLStyles';
-import SDLHeader from '../SDLEditorView/SDLHeader';
+	ThemeProvider,
+	theme as styledTheme,
+	ThemeInterface
+} from '../../styled';
+import MainView from './MainView';
+import '../../index.css';
+import ErrorBoundary from '../ErrorBoundary';
 
-export interface EProps {
-	schema: any;
-	width?: string;
+export interface IProps {
+	width?: any;
+	schema?: any;
+	theme: ThemeInterface;
 }
 
-class SDLExplorerView extends React.Component<EProps> {
-	constructor(props: EProps) {
-		super(props);
-		(window as any).d = this;
-	}
-
+export default class SDLEditorView extends React.Component<IProps, {}> {
+	static defaultProps = {
+		theme: styledTheme,
+		width: '100%'
+	};
 	render() {
-		const { schema, width } = this.props;
-		let emptySchema;
-		if (schema === undefined) {
-			// Schema is undefined when it is being loaded via introspection.
-			emptySchema = <Spinner />;
-		} else if (schema === null) {
-			// Schema is null when it explicitly does not exist, typically due to
-			// an error during introspection.
-			emptySchema = <ErrorContainer>{'No Schema Available'}</ErrorContainer>;
-		}
-		let types;
-		if (schema instanceof GraphQLSchema) {
-			types = sdlArray(schema);
-		}
+		// If no  endpoint passed tries to get one from url
 		return (
-			<SchemaExplorerContainer>
-				<SDLColumn width={width} verticalScroll={true}>
-					<SDLHeader schema={schema} fixed={true} />
-					{emptySchema && emptySchema}
-					{!emptySchema &&
-						schema &&
-						types &&
-						types.map((t: any) => (
-							<SDLFieldDoc schema={schema} type={t} key={t.name} />
-						))}
-				</SDLColumn>
-			</SchemaExplorerContainer>
+			<ErrorBoundary>
+				<ThemeProvider theme={this.props.theme}>
+					<MainView schema={this.props.schema} width={this.props.width} />
+				</ThemeProvider>
+			</ErrorBoundary>
 		);
 	}
 }
-
-export default SDLExplorerView;

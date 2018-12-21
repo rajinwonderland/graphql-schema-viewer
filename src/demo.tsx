@@ -3,6 +3,7 @@ import { styled, theme as styledTheme } from './styled';
 import { SDLEditorView } from './components';
 import { buildSchema, buildClientSchema } from 'graphql';
 import swapi from './swapi.json';
+import ErrorBoundary from './components/ErrorBoundary';
 import Spinner from './components/Spinner';
 
 export interface DemoState {

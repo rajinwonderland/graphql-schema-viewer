@@ -3,6 +3,7 @@ import * as React from 'react';
 import styled from './styled';
 import Spinner from './Spinner';
 import 'react-json-pretty/JSONPretty.monikai.styl';
+import * as JSONPretty from 'react-json-pretty';
 export default class ErrorBoundary extends React.Component<any, any> {
 	constructor(props: any) {
 		super(props);
@@ -19,15 +20,13 @@ export default class ErrorBoundary extends React.Component<any, any> {
 	}
 
 	render() {
-		const { error, errorInfo } = this.state;
-		if (error) {
-			const JSONPretty = React.lazy(() => import('react-json-pretty'));
+		if (this.state.error) {
 			return (
 				<ErrorContainer>
 					<h1>Error</h1>
-					<p>{error.toString()}</p>
+					<p>{this.state.error.toString()}</p>
 					<React.Suspense fallback={<Spinner />}>
-						<JSONPretty json={JSON.stringify(errorInfo)} />
+						<JSONPretty json={JSON.stringify(this.state.errorInfo)} />
 					</React.Suspense>
 				</ErrorContainer>
 			);
@@ -40,7 +39,8 @@ const ErrorContainer = styled.div`
 	color: white;
 	background: #0f202d;
 	font-family: 'Source Code Pro', monospace;
-	h1 & p {
+	h1,
+	p {
 		font-family: 'Open Sans', sans-serif;
 		color: #f25c54;
 	}
